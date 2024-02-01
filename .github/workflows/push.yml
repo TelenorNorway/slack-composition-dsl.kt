@@ -22,14 +22,14 @@ jobs:
     steps:
       - name: Parse commit message
         id: parsed
-        uses: telenornorgeinternal/gap/oss-actions/pr-title-lint@v0
+        uses: oss-actions/pr-title-lint@v0
         with:
           into: ${{ github.ref_name }}
           title: ${{ github.event.head_commit.message }}
           summary: false
       - name: Calculate next version
         id: version
-        uses: telenornorgeinternal/gap/oss-actions/auto-version@v0
+        uses: oss-actions/auto-version@v0
         with:
           type: semver
           token: ${{ github.token }}
