@@ -240,6 +240,15 @@ fun multiExternalSelect(
 	block: (@Dsl MultiExternalSelect).() -> Unit = {},
 ) = MultiExternalSelect(placeholder, minQueryLength, focusOnLoad, max, id).apply(block)
 
+fun multiUserSelect(
+	initialUserIds: Iterable<String>? = null,
+	placeholder: String? = null,
+	focusOnLoad: Boolean = false,
+	max: Int? = null,
+	id: String? = null,
+	block: (@Dsl MultiUserSelect).() -> Unit = {},
+) = MultiUserSelect(initialUserIds, placeholder, focusOnLoad, max, id).apply(block)
+
 // Meta
 fun ChatPostMessageRequest.ChatPostMessageRequestBuilder.blocks(block: (@Dsl Blocks).() -> Unit) =
 	this.blocks(Blocks().apply(block).elements)!!
