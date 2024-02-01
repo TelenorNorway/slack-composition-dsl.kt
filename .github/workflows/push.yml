@@ -1,0 +1,71 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - CHANGELOG.md
+      - CODEOWNERS
+
+jobs:
+  versioning:
+    name: versioning
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref_name }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - name: Parse commit message
+        id: parsed
+        uses: telenornorgeinternal/gap/oss-actions/pr-title-lint@v0
+        with:
+          into: ${{ github.ref_name }}
+          title: ${{ github.event.head_commit.message }}
+          summary: false
+      - name: Calculate next version
+        id: version
+        uses: telenornorgeinternal/gap/oss-actions/auto-version@v0
+        with:
+          type: semver
+          token: ${{ github.token }}
+          refuse_major_increment: ${{ github.ref_name != 'master' }}
+          increment: ${{ steps.parsed.outputs.increment }}
+          hard: ${{ steps.parsed.outputs.hard }}
+      - name: Create tag for version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/git/refs \
+            -f ref='refs/tags/${{ steps.version.outputs.tag }}' \
+            -f sha='${{ github.event.head_commit.id }}' && echo ''
+          echo ::notice title=Versioning::Created tag https://github.com/${{ inputs.repository }}/tree/${{ inputs.name }}
+  
+  build-and-release:
+    name: build and release
+    needs: [ versioning ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Publish
+        env:
+          VERSION: ${{ needs.versioning.outputs.version }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: ./gradlew publish
