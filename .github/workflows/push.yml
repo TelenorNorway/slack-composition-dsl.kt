@@ -46,7 +46,7 @@ jobs:
             /repos/${{ github.repository }}/git/refs \
             -f ref='refs/tags/${{ steps.version.outputs.tag }}' \
             -f sha='${{ github.event.head_commit.id }}' && echo ''
-          echo ::notice title=Versioning::Created tag https://github.com/${{ inputs.repository }}/tree/${{ inputs.name }}
+          echo ::notice title=Versioning::Created tag https://github.com/${{ github.repository }}/tree/${{ steps.version.outputs.tag }}
   
   build-and-release:
     name: build and release
