@@ -8,10 +8,11 @@ import no.telenor.slack.block.Input
 import no.telenor.slack.block.Section
 import no.telenor.slack.composition.Confirmation
 
-class ExternalSelect(
+class MultiExternalSelect(
 	private val placeholder: String? = null,
 	private val minQueryLength: Int? = null,
 	private val focusOnLoad: Boolean? = null,
+	private val max: Int? = null,
 	id: String? = null,
 ) : ActionElement(id), Section.CompatibleElement, Actions.Compatible, Input.Compatible {
 	init {
@@ -31,21 +32,23 @@ class ExternalSelect(
 		this.confirm = Confirmation(title, text, confirm, deny, style)
 	}
 
-	private var selectedOption: OptionObject? = null
+	private var selectedOptions = LinkedHashMap<String, OptionObject>()
 
 	fun initialOption(value: String, text: String, description: String? = null) {
 		require(value.length in 1..75) { "Static select option value must be between 1 and 75 characters" }
 		require(description == null || description.length in 1..75) { "Static select option description must be between 1 and 75 characters" }
-		selectedOption = OptionObject.builder().value(value).text(PlainTextObject(text, true)).also {
+		require(!selectedOptions.containsKey(value)) { "Static select option value must be unique" }
+		selectedOptions[value] = OptionObject.builder().value(value).text(PlainTextObject(text, true)).also {
 			description?.let { desc -> it.description(PlainTextObject(desc, true)) }
 		}.build()
 	}
 
-	override fun into() = BlockElements.externalSelect { select ->
+	override fun into() = BlockElements.multiExternalSelect { select ->
 		id?.let { select.actionId(it) }
 		placeholder?.let { select.placeholder(PlainTextObject(it, true)) }
 		confirm?.into()?.let { select.confirm(it) }
-		selectedOption?.let { select.initialOption(selectedOption) }
+		max?.let { select.maxSelectedItems(it) }
+		if (selectedOptions.isNotEmpty()) select.initialOptions(selectedOptions.values.toList())
 		minQueryLength?.let { select.minQueryLength(it) }
 		select.focusOnLoad(focusOnLoad)
 	}!!
