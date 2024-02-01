@@ -197,6 +197,7 @@ fun conversationSelect(
 	includePrivate: Boolean = false,
 	includePublic: Boolean = false,
 	id: String? = null,
+	block: (@Dsl ConversationSelect).() -> Unit = {},
 ) = ConversationSelect(
 	initialConversationId,
 	defaultToCurrentConversation,
@@ -210,7 +211,7 @@ fun conversationSelect(
 	includePrivate,
 	includePublic,
 	id,
-)
+).apply(block)
 
 fun channelSelect(
 	initialChannelId: String? = null,
@@ -248,6 +249,35 @@ fun multiUserSelect(
 	id: String? = null,
 	block: (@Dsl MultiUserSelect).() -> Unit = {},
 ) = MultiUserSelect(initialUserIds, placeholder, focusOnLoad, max, id).apply(block)
+
+fun multiConversationSelect(
+	initialConversationIds: Iterable<String>? = null,
+	defaultToCurrentConversation: Boolean = false,
+	placeholder: String? = null,
+	focusOnLoad: Boolean = false,
+	excludeBotUsers: Boolean = false,
+	excludeExternalSharedChannels: Boolean = false,
+	includeIM: Boolean = false,
+	includeMPIM: Boolean = false,
+	includePrivate: Boolean = false,
+	includePublic: Boolean = false,
+	max: Int? = null,
+	id: String? = null,
+	block: (@Dsl MultiConversationSelect).() -> Unit = {},
+) = MultiConversationSelect(
+	initialConversationIds,
+	defaultToCurrentConversation,
+	placeholder,
+	focusOnLoad,
+	excludeBotUsers,
+	excludeExternalSharedChannels,
+	includeIM,
+	includeMPIM,
+	includePrivate,
+	includePublic,
+	max,
+	id,
+).apply(block)
 
 // Meta
 fun ChatPostMessageRequest.ChatPostMessageRequestBuilder.blocks(block: (@Dsl Blocks).() -> Unit) =
