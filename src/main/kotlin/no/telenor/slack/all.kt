@@ -221,6 +221,16 @@ fun channelSelect(
 	block: (@Dsl ChannelSelect).() -> Unit = {},
 ) = ChannelSelect(initialChannelId, placeholder, focusOnLoad, responseUrlEnabled, id).apply(block)
 
+// Multi Select
+
+fun multiStaticSelect(
+	placeholder: String? = null,
+	focusOnLoad: Boolean = false,
+	max: Int? = null,
+	id: String? = null,
+	block: (@Dsl MultiStaticSelect).() -> Unit = {},
+) = MultiStaticSelect(placeholder, focusOnLoad, max, id).apply(block)
+
 // Meta
 fun ChatPostMessageRequest.ChatPostMessageRequestBuilder.blocks(block: (@Dsl Blocks).() -> Unit) =
 	this.blocks(Blocks().apply(block).elements)!!
