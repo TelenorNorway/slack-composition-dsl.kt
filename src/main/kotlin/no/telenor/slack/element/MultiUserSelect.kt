@@ -8,7 +8,7 @@ import no.telenor.slack.block.Section
 import no.telenor.slack.composition.Confirmation
 
 class MultiUserSelect(
-	private val initialUserIds: Iterable<String>? = null,
+	private val initialUserIds: List<String>? = null,
 	private val placeholder: String? = null,
 	private val focusOnLoad: Boolean = false,
 	private val max: Int? = null,
@@ -16,6 +16,8 @@ class MultiUserSelect(
 ) : ActionElement(id), Section.CompatibleElement, Actions.Compatible, Input.Compatible {
 	init {
 		require(placeholder == null || placeholder.length <= 150) { "Placeholder text cannot be longer than 150 characters" }
+		require(max == null || max in 1..100) { "Max must be between 1 and 100" }
+		require(initialUserIds == null || initialUserIds.isNotEmpty()) { "Initial user IDs must be non-empty" }
 	}
 
 	private var confirm: Confirmation? = null

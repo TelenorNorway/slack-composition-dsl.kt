@@ -9,7 +9,7 @@ import no.telenor.slack.block.Section
 import no.telenor.slack.composition.Confirmation
 
 class MultiConversationSelect(
-	private val initialConversationIds: Iterable<String>? = null,
+	private val initialConversationIds: List<String>? = null,
 	private val defaultToCurrentConversation: Boolean = false,
 	private val placeholder: String? = null,
 	private val focusOnLoad: Boolean = false,
@@ -24,6 +24,8 @@ class MultiConversationSelect(
 ) : ActionElement(id), Section.CompatibleElement, Actions.Compatible, Input.Compatible {
 	init {
 		require(placeholder == null || placeholder.length <= 150) { "Placeholder text cannot be longer than 150 characters" }
+		require(max == null || max in 1..100) { "Max must be between 1 and 100" }
+		require(initialConversationIds == null || initialConversationIds.isNotEmpty()) { "Initial conversation IDs must be non-empty" }
 	}
 
 	private var confirm: Confirmation? = null
