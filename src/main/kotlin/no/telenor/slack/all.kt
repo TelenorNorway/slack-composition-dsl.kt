@@ -279,6 +279,15 @@ fun multiConversationSelect(
 	id,
 ).apply(block)
 
+fun multiChannelSelect(
+	initialChannelIds: List<String>? = null,
+	placeholder: String? = null,
+	focusOnLoad: Boolean = false,
+	max: Int? = null,
+	id: String? = null,
+	block: (@Dsl MultiChannelSelect).() -> Unit = {},
+) = MultiChannelSelect(initialChannelIds, placeholder, focusOnLoad, max, id).apply(block)
+
 // Meta
 fun ChatPostMessageRequest.ChatPostMessageRequestBuilder.blocks(block: (@Dsl Blocks).() -> Unit) =
 	this.blocks(Blocks().apply(block).elements)!!
