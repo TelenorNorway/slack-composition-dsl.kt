@@ -242,7 +242,7 @@ fun multiExternalSelect(
 ) = MultiExternalSelect(placeholder, minQueryLength, focusOnLoad, max, id).apply(block)
 
 fun multiUserSelect(
-	initialUserIds: Iterable<String>? = null,
+	initialUserIds: List<String>? = null,
 	placeholder: String? = null,
 	focusOnLoad: Boolean = false,
 	max: Int? = null,
@@ -251,7 +251,7 @@ fun multiUserSelect(
 ) = MultiUserSelect(initialUserIds, placeholder, focusOnLoad, max, id).apply(block)
 
 fun multiConversationSelect(
-	initialConversationIds: Iterable<String>? = null,
+	initialConversationIds: List<String>? = null,
 	defaultToCurrentConversation: Boolean = false,
 	placeholder: String? = null,
 	focusOnLoad: Boolean = false,
