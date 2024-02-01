@@ -1,6 +1,7 @@
 package no.telenor.slack
 
 import com.slack.api.methods.request.chat.ChatPostMessageRequest
+import com.slack.api.model.view.View
 import no.telenor.slack.block.*
 import no.telenor.slack.composition.Markdown
 import no.telenor.slack.composition.PlainText
@@ -290,4 +291,7 @@ fun multiChannelSelect(
 
 // Meta
 fun ChatPostMessageRequest.ChatPostMessageRequestBuilder.blocks(block: (@Dsl Blocks).() -> Unit) =
+	this.blocks(Blocks().apply(block).elements)!!
+
+fun View.ViewBuilder.blocks(block: (@Dsl Blocks).() -> Unit) =
 	this.blocks(Blocks().apply(block).elements)!!
