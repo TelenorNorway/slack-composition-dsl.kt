@@ -231,6 +231,15 @@ fun multiStaticSelect(
 	block: (@Dsl MultiStaticSelect).() -> Unit = {},
 ) = MultiStaticSelect(placeholder, focusOnLoad, max, id).apply(block)
 
+fun multiExternalSelect(
+	placeholder: String? = null,
+	minQueryLength: Int? = null,
+	focusOnLoad: Boolean? = null,
+	max: Int? = null,
+	id: String? = null,
+	block: (@Dsl MultiExternalSelect).() -> Unit = {},
+) = MultiExternalSelect(placeholder, minQueryLength, focusOnLoad, max, id).apply(block)
+
 // Meta
 fun ChatPostMessageRequest.ChatPostMessageRequestBuilder.blocks(block: (@Dsl Blocks).() -> Unit) =
 	this.blocks(Blocks().apply(block).elements)!!
