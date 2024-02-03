@@ -1,8 +1,9 @@
 package no.telenor.slack.meta
 
 import com.slack.api.model.block.LayoutBlock
+import okhttp3.internal.toImmutableList
 
-class Blocks {
+class Blocks : Into<List<LayoutBlock>> {
 	internal val elements = mutableListOf<LayoutBlock>()
 
 	internal fun add(block: LayoutBlock) {
@@ -20,5 +21,11 @@ class Blocks {
 
 	operator fun Into<LayoutBlock>.unaryPlus() {
 		elements.add(into())
+	}
+
+	override fun into() = elements.toImmutableList()
+
+	companion object {
+		fun with(block: Blocks.() -> Unit) = Blocks().apply(block).into()
 	}
 }
